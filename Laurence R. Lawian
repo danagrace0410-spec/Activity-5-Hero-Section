@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hotel Hero</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Arial, Helvetica, sans-serif;
+      color: #080a0d;
+      background: #17243b;
+    }
+
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      overflow: hidden;
+      isolation: isolate;
+      background:
+        linear-gradient(180deg, rgba(220, 236, 248, 0.1) 35%, rgba(12, 25, 48, 0.48) 100%),
+        url("hotel-exterior.jpg") center 48% / cover no-repeat;
+      border: 4px solid rgba(255, 255, 255, 0.75);
+      border-radius: 8px;
+    }
+
+    .topbar {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      padding: 8px 36px;
+    }
+
+    .brand {
+      display: grid;
+      place-items: center;
+      flex: 0 0 60px;
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.95);
+      text-align: center;
+      line-height: 1;
+    }
+
+    .brand-mark {
+      display: block;
+      width: 19px;
+      margin: 0 auto 2px;
+      border: 2px solid #222;
+      border-radius: 3px;
+      font-size: 15px;
+      font-weight: 700;
+      line-height: 18px;
+    }
+
+    .brand-name {
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .brand-caption {
+      margin-top: 2px;
+      font-size: 5px;
+      letter-spacing: 1px;
+    }
+
+    .search-more {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      width: 215px;
+      height: 32px;
+      padding: 0 12px;
+      border-radius: 9px;
+      background: rgba(255, 255, 255, 0.3);
+      font-size: 13px;
+      font-weight: 700;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+    }
+
+    .search-icon {
+      position: relative;
+      width: 16px;
+      height: 16px;
+      border: 1.5px solid #111;
+      border-radius: 50%;
+    }
+
+    .search-icon::after {
+      position: absolute;
+      right: -7px;
+      bottom: -4px;
+      width: 9px;
+      height: 1.5px;
+      background: #111;
+      content: "";
+      transform: rotate(45deg);
+      transform-origin: left center;
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 22px;
+      margin: 0 auto;
+    }
+
+    .nav a {
+      padding: 11px 16px;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.28);
+      color: #080a0d;
+      font-size: 16px;
+      font-weight: 800;
+      text-decoration: none;
+      text-shadow: 0 1px 3px rgba(255, 255, 255, 0.6);
+      white-space: nowrap;
+    }
+
+    .menu-toggle {
+      display: grid;
+      gap: 5px;
+      width: 55px;
+      padding: 4px 0;
+      border: 0;
+      background: transparent;
+      cursor: pointer;
+    }
+
+    .menu-toggle span {
+      height: 9px;
+      border-radius: 6px;
+      background: #55545a;
+    }
+
+    .side-menu {
+      position: absolute;
+      z-index: 2;
+      top: 72px;
+      right: 22px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+      width: 180px;
+      padding: 16px 14px 18px;
+      border-radius: 12px;
+      background: rgba(237, 241, 243, 0.58);
+      backdrop-filter: blur(5px);
+    }
+
+    .side-menu h2 {
+      margin: 0 0 1px;
+      font-size: 20px;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+
+    .side-menu a {
+      display: block;
+      width: 116px;
+      padding: 7px 8px;
+      border: 1px solid rgba(0, 0, 0, 0.7);
+      border-radius: 9px;
+      color: #080a0d;
+      font-size: 19px;
+      font-weight: 700;
+      text-align: center;
+      text-decoration: none;
+    }
+
+    .side-menu a:hover {
+      background: rgba(255, 255, 255, 0.5);
+    }
+
+    .auth-links {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+      margin-top: 10px;
+      font-size: 11px;
+      font-weight: 800;
+    }
+
+    .hero-panel {
+      position: absolute;
+      z-index: 0;
+      top: 13%;
+      right: 23%;
+      bottom: 22%;
+      left: 25%;
+      border-radius: 10px;
+      background: rgba(225, 233, 241, 0.13);
+      pointer-events: none;
+    }
+
+    .footer {
+      position: absolute;
+      right: 48px;
+      bottom: 0;
+      left: 48px;
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      align-items: end;
+      min-height: 115px;
+      padding-bottom: 12px;
+      color: #fff;
+    }
+
+    .footer::before,
+    .footer::after {
+      position: absolute;
+      top: 0;
+      width: 37%;
+      height: 3px;
+      background: rgba(255, 255, 255, 0.92);
+      content: "";
+    }
+
+    .footer::before {
+      left: 0;
+    }
+
+    .footer::after {
+      right: 0;
+    }
+
+    .footer-brand {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .footer-brand .brand {
+      flex: 0 0 60px;
+      color: #111;
+    }
+
+    .roomflow {
+      font-size: 18px;
+      font-weight: 900;
+    }
+
+    .contact {
+      text-align: center;
+    }
+
+    .contact h2 {
+      margin: 0 0 10px;
+      font-size: 24px;
+      letter-spacing: 1px;
+    }
+
+    .socials {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+    }
+
+    .socials a {
+      display: grid;
+      place-items: center;
+      width: 27px;
+      height: 27px;
+      border: 2px solid #080a0d;
+      border-radius: 50%;
+      color: #080a0d;
+      font-size: 17px;
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    .socials a:last-child {
+      border-radius: 5px;
+    }
+
+    .footer-links {
+      display: flex;
+      justify-content: flex-end;
+      gap: 22px;
+      padding-bottom: 4px;
+      font-size: 22px;
+    }
+
+    @media (max-width: 800px) {
+      .topbar {
+        flex-wrap: wrap;
+        gap: 12px;
+        padding: 10px 16px;
+      }
+
+      .search-more {
+        flex: 1;
+        min-width: 150px;
+      }
+
+      .nav {
+        order: 3;
+        justify-content: flex-start;
+        width: 100%;
+        gap: 8px;
+        overflow-x: auto;
+      }
+
+      .nav a {
+        padding: 9px 11px;
+        font-size: 13px;
+      }
+
+      .menu-toggle {
+        width: 42px;
+      }
+
+      .side-menu {
+        top: 125px;
+        right: 12px;
+        width: 150px;
+        gap: 12px;
+      }
+
+      .side-menu h2 {
+        font-size: 17px;
+      }
+
+      .side-menu a {
+        width: 110px;
+        font-size: 16px;
+      }
+
+      .hero-panel {
+        right: 18%;
+        left: 12%;
+      }
+
+      .footer {
+        right: 18px;
+        left: 18px;
+        grid-template-columns: 1fr 1fr;
+        min-height: 105px;
+      }
+
+      .contact {
+        grid-column: 2;
+        grid-row: 1;
+      }
+
+      .footer-links {
+        display: none;
+      }
+
+      .roomflow {
+        font-size: 14px;
+      }
+
+      .contact h2 {
+        font-size: 18px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .hero {
+        min-height: 760px;
+        background-position: 54% center;
+      }
+
+      .brand {
+        width: 50px;
+        height: 50px;
+        flex-basis: 50px;
+      }
+
+      .search-more {
+        font-size: 12px;
+      }
+
+      .side-menu {
+        top: 130px;
+      }
+
+      .hero-panel {
+        top: 27%;
+        right: 5%;
+        bottom: 19%;
+        left: 5%;
+      }
+
+      .footer {
+        grid-template-columns: 1fr;
+        justify-items: center;
+        gap: 10px;
+        min-height: 130px;
+      }
+
+      .contact {
+        grid-column: 1;
+        grid-row: 1;
+      }
+
+      .footer-brand {
+        grid-row: 2;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="hero">
+    <div class="hero-panel" aria-hidden="true"></div>
+
+    <header class="topbar">
+      <a class="brand" href="#" aria-label="Hotel home">
+        <span>
+          <span class="brand-mark">H</span>
+          <span class="brand-name">Hotel</span>
+          <span class="brand-caption">HOSPITALITY</span>
+        </span>
+      </a>
+
+      <div class="search-more">
+        <span class="search-icon" aria-hidden="true"></span>
+        <span>View More</span>
+      </div>
+
+      <nav class="nav" aria-label="Main navigation">
+        <a href="#">HOME</a>
+        <a href="#">PRODUCTS</a>
+        <a href="#">ABOUT US</a>
+        <a href="#">OVERVIEW</a>
+      </nav>
+
+      <button class="menu-toggle" aria-label="Open menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </header>
+
+    <aside class="side-menu" aria-label="Account menu">
+      <h2>Main Menu</h2>
+      <a href="#">Profile</a>
+      <a href="#">History</a>
+      <a href="#">Settings</a>
+      <a href="#">Help</a>
+      <a href="#">Account</a>
+      <div class="auth-links">
+        <a href="#">SIGN UP</a>
+        <a href="#">LOGIN</a>
+      </div>
+    </aside>
+
+    <footer class="footer">
+      <div class="footer-brand">
+        <a class="brand" href="#" aria-label="Hotel home">
+          <span>
+            <span class="brand-mark">H</span>
+            <span class="brand-name">Hotel</span>
+            <span class="brand-caption">HOSPITALITY</span>
+          </span>
+        </a>
+        <span class="roomflow">ROOMFLOW</span>
+      </div>
+
+      <div class="contact">
+        <h2>CONTACT US</h2>
+        <div class="socials" aria-label="Social links">
+          <a href="#" aria-label="Facebook">f</a>
+          <a href="#" aria-label="Phone">☎</a>
+          <a href="#" aria-label="Telegram">➤</a>
+          <a href="#" aria-label="YouTube">▶</a>
+        </div>
+      </div>
+
+      <div class="footer-links">
+        <span>Services</span>
+        <span>Inc.</span>
+      </div>
+    </footer>
+  </main>
+</body>
+</html>
